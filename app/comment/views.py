@@ -26,6 +26,12 @@ from .serializers import CommentSerializer
                 location=OpenApiParameter.QUERY,
                 description="Filter by product_id",
             ),
+            OpenApiParameter(
+                name="star_rating",
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.QUERY,
+                description="Filter by star rating",
+            ),
         ],
     ),
 )
@@ -36,8 +42,11 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         product_id = self.request.query_params.get("product_id")
+        star_rating = self.request.query_params.get("star_rating")
         if product_id:
             queryset = queryset.filter(product_id=product_id)
+        if star_rating:
+            queryset = queryset.filter(star_rating=star_rating)
         return queryset.order_by("-created_at")
 
     def get_serializer_class(self):
